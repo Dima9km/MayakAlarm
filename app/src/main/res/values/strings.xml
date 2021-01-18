@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">Mayak Alarm</string>
+    <string name="app_name">Просто радиобудильник</string>
     <string name="set_alarm">Включить</string>
-    <string name="cancel_alarm">Отменить</string>
+    <string name="cancel_alarm">Выключить</string>
+    <string name="snooze_10_min">отложить на 10 мин.</string>
+    <string name="dismiss">отключить</string>
 </resources>

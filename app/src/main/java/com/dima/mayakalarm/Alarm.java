@@ -12,11 +12,20 @@ public class Alarm {
     Context context;
     int hour;
     int minute;
+    boolean alarmOn;
 
     public Alarm(Context context, int hour, int minute) {
         this.context = context;
         this.hour = hour;
         this.minute = minute;
+    }
+
+    public boolean isAlarmOn() {
+        return alarmOn;
+    }
+
+    public void setAlarmOn(boolean alarmOn) {
+        this.alarmOn = alarmOn;
     }
 
     public void setAlarm() {
