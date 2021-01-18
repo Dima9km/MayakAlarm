@@ -8,7 +8,6 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-       Player player = new Player(context);
-       player.play();
+        context.startActivity(new Intent(context, AlarmRingingActivity.class));
     }
 }
