@@ -14,10 +14,11 @@ public class Alarm {
     int minute;
     boolean alarmOn;
 
-    public Alarm(Context context, int hour, int minute) {
+    public Alarm(Context context, int hour, int minute, boolean alarmOn) {
         this.context = context;
         this.hour = hour;
         this.minute = minute;
+        this.alarmOn = alarmOn;
     }
 
     public boolean isAlarmOn() {

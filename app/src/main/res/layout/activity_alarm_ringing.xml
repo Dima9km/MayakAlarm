@@ -1,35 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/tvWeather"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:fontFamily="@font/roboto_medium_numbers"
+        android:gravity="center_horizontal"
+        android:textSize="21sp"
+        tools:text="Here will be weather response" />
+
+    <Button
+        android:id="@+id/btnDismiss"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
+        android:layout_below="@id/tvWeather"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/oranges2"
+        android:gravity="center"
+        android:text="@string/dismiss" />
 
-        <Button
-            android:id="@+id/btnDismiss"
-            android:layout_width="180dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:background="@color/oranges2"
-            android:text="@string/dismiss" />
+    <Space
+        android:id="@+id/space"
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:layout_below="@id/btnDismiss" />
 
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="32dp" />
+    <Button
+        android:id="@+id/btnSnooze"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/space"
+        android:background="@color/oranges2"
+        android:text="@string/snooze_10_min" />
 
-        <Button
-            android:id="@+id/btnSnooze"
-            android:layout_width="240dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:background="@color/oranges2"
-            android:text="@string/snooze_10_min" />
-
-    </LinearLayout>
-
-</FrameLayout>
+</RelativeLayout>

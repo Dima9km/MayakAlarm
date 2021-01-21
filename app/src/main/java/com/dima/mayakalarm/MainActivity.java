@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         alarmOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alarm = new Alarm(MainActivity.this, timePicker.getHour(), timePicker.getMinute());
+                alarm = new Alarm(MainActivity.this, timePicker.getHour(), timePicker.getMinute(), true);
 
                 calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
                 calendar.set(Calendar.MINUTE, timePicker.getMinute());
