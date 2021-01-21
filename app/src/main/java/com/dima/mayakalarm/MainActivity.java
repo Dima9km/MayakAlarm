@@ -1,5 +1,7 @@
 package com.dima.mayakalarm;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import java.util.Calendar;
 
@@ -17,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private Button alarmOff;
     private TimePicker timePicker;
     private Alarm alarm;
+    public static final String CHANNEL_ID = "ALARM_SERVICE_CHANNEL";
 
 
     @Override
@@ -31,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance();
 
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                .setContentText("Alarm on!")
+                .setSmallIcon(R.drawable.ic_alarm_notification)
+                .build();
+
         alarmOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,13 +53,15 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_SHORT).show();
                 alarm.setAlarm();
                 alarm.setAlarmOn(true);
-            }
+
+                notificationManager.notify(1,notification);            }
         });
 
         alarmOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alarm.setAlarmOn(false);
+                notificationManager.cancel(1);
             }
         });
     }

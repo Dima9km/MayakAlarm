@@ -71,7 +71,8 @@ public class AlarmRingingActivity extends AppCompatActivity {
                 Alarm alarm = new Alarm(
                         AlarmRingingActivity.this,
                         calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE)
+                        calendar.get(Calendar.MINUTE),
+                        true
                 );
 
                 alarm.setAlarm();
