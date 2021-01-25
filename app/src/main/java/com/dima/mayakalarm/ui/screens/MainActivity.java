@@ -1,4 +1,4 @@
-package com.dima.mayakalarm;
+package com.dima.mayakalarm.ui.screens;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+
+import com.dima.mayakalarm.model.Alarm;
+import com.dima.mayakalarm.R;
 
 import java.util.Calendar;
 
@@ -54,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 alarm.setAlarm();
                 alarm.setAlarmOn(true);
 
-                notificationManager.notify(1,notification);            }
+                notificationManager.notify(1, notification);
+            }
         });
 
         alarmOff.setOnClickListener(new View.OnClickListener() {

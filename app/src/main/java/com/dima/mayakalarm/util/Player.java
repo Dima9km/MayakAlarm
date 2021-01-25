@@ -1,4 +1,4 @@
-package com.dima.mayakalarm;
+package com.dima.mayakalarm.util;
 
 import android.content.Context;
 import android.net.Uri;

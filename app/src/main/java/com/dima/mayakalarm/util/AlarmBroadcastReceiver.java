@@ -1,8 +1,10 @@
-package com.dima.mayakalarm;
+package com.dima.mayakalarm.util;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import com.dima.mayakalarm.ui.screens.AlarmRingingActivity;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
