@@ -11,10 +11,32 @@ import java.util.Calendar;
 
 public class Alarm {
 
-    Context context;
     int hour;
     int minute;
     boolean alarmOn;
+    Context context;
+
+    public int getHour() {
+        return hour;
+    }
+
+    public void setHour(int hour) {
+        this.hour = hour;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public void setMinute(int minute) {
+        this.minute = minute;
+    }
+
+    public Alarm(int hour, int minute, boolean alarmOn) {
+        this.hour = hour;
+        this.minute = minute;
+        this.alarmOn = alarmOn;
+    }
 
     public Alarm(Context context, int hour, int minute, boolean alarmOn) {
         this.context = context;

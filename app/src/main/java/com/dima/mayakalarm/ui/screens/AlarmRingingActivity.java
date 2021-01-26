@@ -19,7 +19,6 @@ import java.util.Calendar;
 
 public class AlarmRingingActivity extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +46,7 @@ public class AlarmRingingActivity extends AppCompatActivity {
                 calendar.setTimeInMillis(System.currentTimeMillis());
                 calendar.add(Calendar.MINUTE, 10);
 
-                Alarm alarm = new Alarm(
-                        AlarmRingingActivity.this,
-                        calendar.get(Calendar.HOUR_OF_DAY),
+                Alarm alarm = new Alarm(calendar.get(Calendar.HOUR_OF_DAY),
                         calendar.get(Calendar.MINUTE),
                         true
                 );

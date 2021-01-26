@@ -43,8 +43,6 @@ public class RemoteInfoDownloader {
                                     "\n" +
                                     "Ветерок: " +
                                     weatherResponse.wind.speed + " м/с";
-
-                    String temp = currentWeather;
                 }
             }
 
