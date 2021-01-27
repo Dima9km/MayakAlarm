@@ -8,13 +8,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkHelper {
     public static NetworkHelper retrofitInstance;
-    private final static String BaseUrl = "http://api.openweathermap.org/";
+    private final static String baseUrl = "http://api.openweathermap.org/";
     public Retrofit retrofit;
 
     public NetworkHelper() {
         Gson gson = new GsonBuilder().setLenient().create();
         retrofit = new Retrofit.Builder()
-                .baseUrl(BaseUrl)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }

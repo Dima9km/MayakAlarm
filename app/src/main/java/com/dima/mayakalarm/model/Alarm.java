@@ -14,7 +14,6 @@ public class Alarm {
     int hour;
     int minute;
     boolean alarmOn;
-    Context context;
 
     public int getHour() {
         return hour;
@@ -38,13 +37,6 @@ public class Alarm {
         this.alarmOn = alarmOn;
     }
 
-    public Alarm(Context context, int hour, int minute, boolean alarmOn) {
-        this.context = context;
-        this.hour = hour;
-        this.minute = minute;
-        this.alarmOn = alarmOn;
-    }
-
     public boolean isAlarmOn() {
         return alarmOn;
     }
@@ -53,7 +45,7 @@ public class Alarm {
         this.alarmOn = alarmOn;
     }
 
-    public void setAlarm() {
+    public void setAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);

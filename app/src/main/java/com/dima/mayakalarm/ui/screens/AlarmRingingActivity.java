@@ -6,30 +6,67 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dima.mayakalarm.R;
 import com.dima.mayakalarm.model.Alarm;
+import com.dima.mayakalarm.repository.Repository;
+import com.dima.mayakalarm.repository.RepositoryListener;
 import com.dima.mayakalarm.util.Player;
 
 import java.util.Calendar;
 
 public class AlarmRingingActivity extends AppCompatActivity {
 
+    private Button dismissButton;
+    private Button snoozeButton;
+    private TextView weatherText;
+    private ProgressBar preloader;
+
+
+    private final Repository repository = new Repository(new RepositoryListener() {
+
+        @Override
+        public void onStartDownload() {
+            preloader.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onGetRemoteInfo(String currentWeather) {
+            weatherText.setText(currentWeather);
+        }
+
+        @Override
+        public void onError(String message) {
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onEndDownload() {
+            preloader.setVisibility(View.GONE);
+        }
+    });
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_ringing);
-        Button dismissButton = findViewById(R.id.btnDismiss);
-        Button snoozeButton = findViewById(R.id.btnSnooze);
-        TextView weatherText = findViewById(R.id.tvWeather);
+
+        dismissButton = findViewById(R.id.btnDismiss);
+        snoozeButton = findViewById(R.id.btnSnooze);
+        weatherText = findViewById(R.id.tvWeather);
+        preloader = findViewById(R.id.pbPreloader);
+
         turnBacklightOn();
         Player player = new Player(getApplicationContext());
         player.play();
-        weatherText.setText("some problems with weather");
+
+        repository.getRemoteInfo();
 
         dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +88,7 @@ public class AlarmRingingActivity extends AppCompatActivity {
                         true
                 );
 
-                alarm.setAlarm();
+                alarm.setAlarm(getApplicationContext());
                 player.stop();
                 finish();
             }

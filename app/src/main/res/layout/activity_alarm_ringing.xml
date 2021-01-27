@@ -14,6 +14,14 @@
         android:textSize="21sp"
         tools:text="Here will be weather response" />
 
+    <ProgressBar
+        android:id="@+id/pbPreloader"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:gravity="center_horizontal"
+        android:indeterminate="true"
+        android:indeterminateTint="@android:color/darker_gray" />
+
     <Button
         android:id="@+id/btnDismiss"
         android:layout_width="match_parent"

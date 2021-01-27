@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         alarmOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alarm = new Alarm(getApplicationContext(), timePicker.getHour(), timePicker.getMinute(), true);
+                alarm = new Alarm(timePicker.getHour(), timePicker.getMinute(), true);
                 sharedPreferencesManager.updateAlarmClock(alarm);
 
                 calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(), "Будильник зазвучит в " + DateFormat.format("HH.mm", calendar).toString(), Toast.LENGTH_SHORT).show();
 
-                alarm.setAlarm();
+                alarm.setAlarm(getApplicationContext());
                 alarm.setAlarmOn(true);
 
                 notificationManager.notify(1, notification);
