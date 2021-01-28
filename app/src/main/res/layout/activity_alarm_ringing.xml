@@ -1,50 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvWeather"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:fontFamily="@font/roboto_medium_numbers"
-        android:gravity="center_horizontal"
-        android:textSize="21sp"
-        tools:text="Here will be weather response" />
+        android:layout_height="wrap_content">
 
-    <ProgressBar
-        android:id="@+id/pbPreloader"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:gravity="center_horizontal"
-        android:indeterminate="true"
-        android:indeterminateTint="@android:color/darker_gray" />
+        <TextView
+            android:id="@+id/tvWeather"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/roboto_medium_numbers"
+            android:gravity="center"
+            android:textSize="18sp"
+            tools:text="Here will be weather response" />
+
+        <ProgressBar
+            android:id="@+id/pbPreloader"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="left"
+            android:padding="4dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@android:color/darker_gray" />
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/ivPicture"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
 
     <Button
         android:id="@+id/btnDismiss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvWeather"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
+        android:layout_margin="4dp"
         android:background="@color/bluuu"
         android:gravity="center"
         android:text="@string/dismiss" />
 
     <Space
-        android:id="@+id/space"
         android:layout_width="match_parent"
-        android:layout_height="16dp"
-        android:layout_below="@id/btnDismiss" />
+        android:layout_height="16dp" />
 
     <Button
         android:id="@+id/btnSnooze"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/space"
+        android:layout_margin="4dp"
         android:background="@color/bluuu2"
         android:text="@string/snooze_10_min" />
 
-</RelativeLayout>
+</LinearLayout>

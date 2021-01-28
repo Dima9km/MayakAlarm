@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,9 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.dima.mayakalarm.R;
 import com.dima.mayakalarm.model.Alarm;
+import com.dima.mayakalarm.model.InfoToShow;
 import com.dima.mayakalarm.repository.Repository;
 import com.dima.mayakalarm.repository.RepositoryListener;
 import com.dima.mayakalarm.util.Player;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
@@ -26,6 +29,7 @@ public class AlarmRingingActivity extends AppCompatActivity {
     private Button dismissButton;
     private Button snoozeButton;
     private TextView weatherText;
+    private ImageView imageDaily;
     private ProgressBar preloader;
 
 
@@ -37,8 +41,11 @@ public class AlarmRingingActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onGetRemoteInfo(String currentWeather) {
-            weatherText.setText(currentWeather);
+        public void onGetRemoteInfo(InfoToShow infoToShow) {
+            weatherText.setText(infoToShow.getCurrentWeather());
+            Picasso.with(getApplicationContext())
+                    .load(infoToShow.getImageUrl())
+                    .into(imageDaily);
         }
 
         @Override
@@ -61,12 +68,14 @@ public class AlarmRingingActivity extends AppCompatActivity {
         snoozeButton = findViewById(R.id.btnSnooze);
         weatherText = findViewById(R.id.tvWeather);
         preloader = findViewById(R.id.pbPreloader);
+        imageDaily = findViewById(R.id.ivPicture);
 
         turnBacklightOn();
+
         Player player = new Player(getApplicationContext());
         player.play();
 
-        repository.getRemoteInfo();
+        repository.getInfoToShow();
 
         dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
