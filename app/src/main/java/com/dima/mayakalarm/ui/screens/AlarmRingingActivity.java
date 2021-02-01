@@ -26,8 +26,6 @@ import java.util.Calendar;
 
 public class AlarmRingingActivity extends AppCompatActivity {
 
-    private Button dismissButton;
-    private Button snoozeButton;
     private TextView weatherText;
     private ImageView imageDaily;
     private ProgressBar preloader;
@@ -64,8 +62,8 @@ public class AlarmRingingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_ringing);
 
-        dismissButton = findViewById(R.id.btnDismiss);
-        snoozeButton = findViewById(R.id.btnSnooze);
+        Button dismissButton = findViewById(R.id.btnDismiss);
+        Button snoozeButton = findViewById(R.id.btnSnooze);
         weatherText = findViewById(R.id.tvWeather);
         preloader = findViewById(R.id.pbPreloader);
         imageDaily = findViewById(R.id.ivPicture);
@@ -92,12 +90,12 @@ public class AlarmRingingActivity extends AppCompatActivity {
                 calendar.setTimeInMillis(System.currentTimeMillis());
                 calendar.add(Calendar.MINUTE, 10);
 
-                Alarm alarm = new Alarm(calendar.get(Calendar.HOUR_OF_DAY),
+                Alarm snoozedAlarm = new Alarm(calendar.get(Calendar.HOUR_OF_DAY),
                         calendar.get(Calendar.MINUTE),
                         true
                 );
 
-                alarm.setAlarm(getApplicationContext());
+                snoozedAlarm.setAlarm(getApplicationContext());
                 player.stop();
                 finish();
             }

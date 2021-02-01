@@ -2,8 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvAlarmSetStatus"
+        android:textSize="18sp"
+        android:gravity="center"/>
 
     <TimePicker
         android:id="@+id/tpTime"
@@ -14,20 +22,21 @@
 
     <Button
         android:id="@+id/btnSetAlarm"
-        android:layout_width="240dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
         android:background="@color/bluuu"
         android:text="@string/set_alarm" />
 
     <Space
         android:layout_width="wrap_content"
-        android:layout_height="32dp" />
+        android:layout_height="16dp" />
 
     <Button
         android:id="@+id/btnCancelAlarm"
-        android:layout_width="180dp"
-        android:layout_height="48dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
         android:layout_gravity="center"
         android:background="@color/bluuu"
         android:text="@string/cancel_alarm" />

@@ -12,16 +12,17 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        createNotificationChannnel();
+        createNotificationChannel();
     }
 
-    private void createNotificationChannnel() {
+    private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
                     CHANNEL_ID,
-                    "Alarm Service Channel",
-                    NotificationManager.IMPORTANCE_DEFAULT
+                    "Будильник включён",
+                    NotificationManager.IMPORTANCE_LOW
             );
+            serviceChannel.setSound(null, null);
 
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);

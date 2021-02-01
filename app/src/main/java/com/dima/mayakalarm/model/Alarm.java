@@ -11,24 +11,16 @@ import java.util.Calendar;
 
 public class Alarm {
 
-    int hour;
-    int minute;
-    boolean alarmOn;
+    private final int hour;
+    private final int minute;
+    private boolean alarmOn;
 
     public int getHour() {
         return hour;
     }
 
-    public void setHour(int hour) {
-        this.hour = hour;
-    }
-
     public int getMinute() {
         return minute;
-    }
-
-    public void setMinute(int minute) {
-        this.minute = minute;
     }
 
     public Alarm(int hour, int minute, boolean alarmOn) {
@@ -46,6 +38,7 @@ public class Alarm {
     }
 
     public void setAlarm(Context context) {
+
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);

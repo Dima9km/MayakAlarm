@@ -1,5 +1,6 @@
 package com.dima.mayakalarm.repository;
 
+import com.dima.mayakalarm.model.Alarm;
 import com.dima.mayakalarm.model.InfoToShow;
 import com.dima.mayakalarm.remote.RemoteInfoDownloader;
 import com.dima.mayakalarm.remote.RemoteInfoListener;
@@ -7,6 +8,7 @@ import com.dima.mayakalarm.remote.RemoteInfoListener;
 public class Repository {
 
     private RepositoryListener repositoryListener;
+    public Alarm alarm;
 
     public Repository(RepositoryListener repositoryListener) {
         this.repositoryListener = repositoryListener;
@@ -29,4 +31,5 @@ public class Repository {
             }
         });
     }
+
 }
