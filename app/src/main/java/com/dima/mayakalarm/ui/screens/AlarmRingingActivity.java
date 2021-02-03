@@ -30,7 +30,6 @@ public class AlarmRingingActivity extends AppCompatActivity {
     private ImageView imageDaily;
     private ProgressBar preloader;
 
-
     private final Repository repository = new Repository(new RepositoryListener() {
 
         @Override

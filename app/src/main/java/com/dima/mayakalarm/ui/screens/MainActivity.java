@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.dima.mayakalarm.R;
 import com.dima.mayakalarm.model.Alarm;
-import com.dima.mayakalarm.preferences.SharedPreferencesManager;
+import com.dima.mayakalarm.repository.Repository;
 
 import java.util.Calendar;
 
@@ -25,13 +25,15 @@ public class MainActivity extends AppCompatActivity {
     private Button turnAlarmOn;
     private Button turnAlarmOff;
     private TimePicker timePicker;
+
     private Alarm alarm;
-    public static final String CHANNEL_ID = "ALARM_SERVICE_CHANNEL";
-    private SharedPreferencesManager sharedPreferencesManager;
     private final Calendar calendar = Calendar.getInstance();
 
+    public static final String CHANNEL_ID = "ALARM_SERVICE_CHANNEL";
     private NotificationManager notificationManager;
     private Notification notification;
+
+    private Repository repository = new Repository();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
         timePicker = findViewById(R.id.tpTime);
         timePicker.setIs24HourView(true);
 
+        repository.setPreferences(PreferenceManager.getDefaultSharedPreferences(this));
+
+        alarm = repository.getAlarmClock();
+
         notificationManager = getSystemService(NotificationManager.class);
 
         notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
@@ -52,10 +58,6 @@ public class MainActivity extends AppCompatActivity {
                 .setSmallIcon(R.drawable.ic_alarm_notification)
                 .build();
 
-        sharedPreferencesManager = new SharedPreferencesManager(PreferenceManager
-                .getDefaultSharedPreferences(this));
-
-        alarm = sharedPreferencesManager.getAlarmClock();
         calendar.set(Calendar.HOUR_OF_DAY, alarm.getHour());
         calendar.set(Calendar.MINUTE, alarm.getMinute());
         updateUI();
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 alarm.setAlarm(getApplicationContext());
                 alarm.setAlarmOn(true);
 
-                sharedPreferencesManager.updateAlarmClock(alarm);
+                repository.updateAlarmClock(alarm);
                 updateUI();
             }
         });
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 alarm.setAlarmOn(false);
-                sharedPreferencesManager.updateAlarmClock(alarm);
+                repository.updateAlarmClock(alarm);
                 updateUI();
             }
         });
