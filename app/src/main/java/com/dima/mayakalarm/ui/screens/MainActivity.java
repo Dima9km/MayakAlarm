@@ -11,11 +11,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 
 import com.dima.mayakalarm.R;
 import com.dima.mayakalarm.model.Alarm;
 import com.dima.mayakalarm.repository.Repository;
+import com.dima.mayakalarm.util.NotificationHelper;
 
 import java.util.Calendar;
 
@@ -28,12 +28,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Alarm alarm;
     private final Calendar calendar = Calendar.getInstance();
-
-    public static final String CHANNEL_ID = "ALARM_SERVICE_CHANNEL";
+    private final NotificationHelper notificationHelper = new NotificationHelper();
     private NotificationManager notificationManager;
     private Notification notification;
-
-    private Repository repository = new Repository();
+    private final Repository repository = new Repository();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
         alarm = repository.getAlarmClock();
 
-        notificationManager = getSystemService(NotificationManager.class);
-
-        notification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                .setContentText("Будильник включён")
-                .setSmallIcon(R.drawable.ic_alarm_notification)
-                .build();
+        notificationManager = notificationHelper.getManager(this);
+        notification = notificationHelper.getNotification(this);
 
         calendar.set(Calendar.HOUR_OF_DAY, alarm.getHour());
         calendar.set(Calendar.MINUTE, alarm.getMinute());

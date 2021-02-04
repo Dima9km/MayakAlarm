@@ -30,7 +30,10 @@ public class AlarmRingingActivity extends AppCompatActivity {
     private ImageView imageDaily;
     private ProgressBar preloader;
 
+    private Player player;
+
     private final Repository repository = new Repository(new RepositoryListener() {
+
 
         @Override
         public void onStartDownload() {
@@ -69,7 +72,7 @@ public class AlarmRingingActivity extends AppCompatActivity {
 
         turnBacklightOn();
 
-        Player player = new Player(getApplicationContext());
+        player = new Player(this);
         player.play();
 
         repository.getInfoToShow();
@@ -81,6 +84,7 @@ public class AlarmRingingActivity extends AppCompatActivity {
                 finish();
             }
         });
+
 
         snoozeButton.setOnClickListener(new View.OnClickListener() {
             @Override
