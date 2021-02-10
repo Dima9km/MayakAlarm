@@ -18,6 +18,7 @@ public class Alarm {
     private int minute;
     private boolean isAlarmOn;
     private boolean isAlarmSetOnNextDay;
+    private AlarmManager alarmManager;
 
     public Alarm(int hour, int minute, boolean isAlarmOn, boolean isAlarmSetOnNextDay) {
         this.hour = hour;
@@ -60,7 +61,7 @@ public class Alarm {
 
     public void setAlarm(Context context, Calendar calendar) {
 
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
@@ -75,5 +76,11 @@ public class Alarm {
                 .format("HH.mm\n EEEE, dd MMMM yyyy", calendar).toString());
         Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
 
+    }
+
+    public void cancelAlarm(Context context) {
+        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmManager.cancel(pendingIntent);
     }
 }

@@ -1,7 +1,5 @@
 package com.dima.mayakalarm.util;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,9 +14,7 @@ public class DeviceRebootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Repository repository = new Repository();
-        NotificationHelper notificationHelper = new NotificationHelper();
-        NotificationManager notificationManager = notificationHelper.getManager(context);
-        Notification notification = notificationHelper.getNotification(context);
+        NotificationHelper notificationHelper = new NotificationHelper(context);
 
         repository.setPreferences(PreferenceManager.getDefaultSharedPreferences(context));
         Alarm alarm = repository.getAlarmClock();
@@ -36,7 +32,7 @@ public class DeviceRebootReceiver extends BroadcastReceiver {
 
             alarm.setAlarm(context, calendar);
 
-            notificationManager.notify(1, notification);
+            notificationHelper.show();
         }
     }
 }

@@ -1,7 +1,5 @@
 package com.dima.mayakalarm.ui.screens;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
@@ -28,9 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Alarm alarm;
     private final Calendar calendar = Calendar.getInstance();
-    private final NotificationHelper notificationHelper = new NotificationHelper();
-    private NotificationManager notificationManager;
-    private Notification notification;
+    private final NotificationHelper notificationHelper = new NotificationHelper(this);
     private final Repository repository = new Repository();
 
     @Override
@@ -48,9 +44,6 @@ public class MainActivity extends AppCompatActivity {
         repository.setPreferences(PreferenceManager.getDefaultSharedPreferences(this));
 
         alarm = repository.getAlarmClock();
-
-        notificationManager = notificationHelper.getManager(this);
-        notification = notificationHelper.getNotification(this);
 
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, alarm.getHour());
@@ -116,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             timePicker.setVisibility(View.VISIBLE);
             turnAlarmOff.setVisibility(View.GONE);
             alarmSetStatus.setText(R.string.alarm_status_off);
-            notificationManager.cancel(1);
+            notificationHelper.hide();
 
         } else {
             turnAlarmOn.setVisibility(View.GONE);
@@ -125,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             alarmSetStatus.setText(String.format(getResources()
                     .getString(R.string.alarm_status_on), DateFormat
                     .format("HH.mm\n EEEE, dd MMMM yyyy", calendar).toString()));
-            notificationManager.notify(1, notification);
+            notificationHelper.show();
         }
     }
 }
