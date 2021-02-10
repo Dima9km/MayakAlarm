@@ -2,6 +2,7 @@ package com.dima.mayakalarm.ui.screens;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -34,7 +35,6 @@ public class AlarmRingingActivity extends AppCompatActivity {
 
     private final Repository repository = new Repository(new RepositoryListener() {
 
-
         @Override
         public void onStartDownload() {
             preloader.setVisibility(View.VISIBLE);
@@ -58,6 +58,7 @@ public class AlarmRingingActivity extends AppCompatActivity {
             preloader.setVisibility(View.GONE);
         }
     });
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,7 +86,6 @@ public class AlarmRingingActivity extends AppCompatActivity {
             }
         });
 
-
         snoozeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,11 +94,15 @@ public class AlarmRingingActivity extends AppCompatActivity {
                 calendar.add(Calendar.MINUTE, 10);
 
                 Alarm snoozedAlarm = new Alarm(calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE),
-                        true
-                );
+                        calendar.get(Calendar.MINUTE), true, false);
 
-                snoozedAlarm.setAlarm(getApplicationContext());
+                snoozedAlarm.setAlarm(getApplicationContext(), calendar);
+
+                String toastText = String.format(getResources()
+                        .getString(R.string.alarm_status_on), DateFormat
+                        .format("HH.mm, EEE, dd MMMM yyyy", calendar).toString());
+                Toast.makeText(AlarmRingingActivity.this, toastText, Toast.LENGTH_LONG).show();
+
                 player.stop();
                 finish();
             }

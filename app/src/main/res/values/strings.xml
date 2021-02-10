@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">1stAlarm</string>
     <string name="set_alarm">Включить</string>
-    <string name="cancel_alarm">Будильник не нужен!</string>
+    <string name="cancel_alarm">Выключить</string>
     <string name="snooze_10_min">Отложить на 10 мин.</string>
-    <string name="dismiss">Встану завтра в то же время</string>
+    <string name="dismiss">Отложить на завтра</string>
     <string name="alarm_status_on">Будильник включён на %s</string>
     <string name="alarm_status_off">Будильник выключен</string>
 </resources>
