@@ -1,6 +1,7 @@
 package com.dima.mayakalarm.repository;
 
-import android.content.SharedPreferences;
+import android.content.Context;
+import android.preference.PreferenceManager;
 
 import com.dima.mayakalarm.model.Alarm;
 import com.dima.mayakalarm.model.InfoToShow;
@@ -11,10 +12,12 @@ import com.dima.mayakalarm.remote.RemoteInfoListener;
 public class Repository {
 
     private RepositoryListener repositoryListener;
+    private Context context;
+    private SharedPreferencesManager sharedPreferencesManager;
 
-    SharedPreferencesManager sharedPreferencesManager;
-
-    public Repository() {
+    public Repository(Context context) {
+        this.context = context;
+        sharedPreferencesManager = new SharedPreferencesManager(PreferenceManager.getDefaultSharedPreferences(context));
     }
 
     public Repository(RepositoryListener repositoryListener) {
@@ -37,10 +40,6 @@ public class Repository {
                 repositoryListener.onError(message);
             }
         });
-    }
-
-    public void setPreferences(SharedPreferences preferences) {
-        sharedPreferencesManager = new SharedPreferencesManager(preferences);
     }
 
     public Alarm getAlarmClock() {

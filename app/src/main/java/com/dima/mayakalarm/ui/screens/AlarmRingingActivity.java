@@ -2,7 +2,6 @@ package com.dima.mayakalarm.ui.screens;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,20 +15,19 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dima.mayakalarm.R;
-import com.dima.mayakalarm.model.Alarm;
 import com.dima.mayakalarm.model.InfoToShow;
 import com.dima.mayakalarm.repository.Repository;
 import com.dima.mayakalarm.repository.RepositoryListener;
+import com.dima.mayakalarm.util.AlarmHelper;
 import com.dima.mayakalarm.util.Player;
 import com.squareup.picasso.Picasso;
-
-import java.util.Calendar;
 
 public class AlarmRingingActivity extends AppCompatActivity {
 
     private TextView weatherText;
     private ImageView imageDaily;
     private ProgressBar preloader;
+    private AlarmHelper alarmHelper;
 
     private Player player;
 
@@ -89,20 +87,8 @@ public class AlarmRingingActivity extends AppCompatActivity {
         snoozeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.add(Calendar.MINUTE, 10);
-
-                Alarm snoozedAlarm = new Alarm(calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE), true, false);
-
-                snoozedAlarm.setAlarm(getApplicationContext(), calendar);
-
-                String toastText = String.format(getResources()
-                        .getString(R.string.alarm_status_on), DateFormat
-                        .format("HH.mm, EEE, dd MMMM yyyy", calendar).toString());
-                Toast.makeText(AlarmRingingActivity.this, toastText, Toast.LENGTH_LONG).show();
-
+                alarmHelper = new AlarmHelper(getApplicationContext());
+                alarmHelper.setAlarm(true);
                 player.stop();
                 finish();
             }

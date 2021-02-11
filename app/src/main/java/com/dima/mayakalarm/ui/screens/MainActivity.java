@@ -1,7 +1,6 @@
 package com.dima.mayakalarm.ui.screens;
 
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.dima.mayakalarm.R;
 import com.dima.mayakalarm.model.Alarm;
 import com.dima.mayakalarm.repository.Repository;
+import com.dima.mayakalarm.util.AlarmHelper;
 import com.dima.mayakalarm.util.NotificationHelper;
 
 import java.util.Calendar;
@@ -25,9 +25,11 @@ public class MainActivity extends AppCompatActivity {
     private TimePicker timePicker;
 
     private Alarm alarm;
+    private long time;
     private final Calendar calendar = Calendar.getInstance();
-    private final NotificationHelper notificationHelper = new NotificationHelper(this);
-    private final Repository repository = new Repository();
+    private NotificationHelper notificationHelper;
+    private Repository repository;
+    private AlarmHelper alarmHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +43,12 @@ public class MainActivity extends AppCompatActivity {
         timePicker = findViewById(R.id.tpTime);
         timePicker.setIs24HourView(true);
 
-        repository.setPreferences(PreferenceManager.getDefaultSharedPreferences(this));
+        repository = new Repository(this);
+        notificationHelper = new NotificationHelper(this);
+        alarmHelper = new AlarmHelper(this);
 
         alarm = repository.getAlarmClock();
-
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, alarm.getHour());
-        calendar.set(Calendar.MINUTE, alarm.getMinute());
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        if (alarm.isAlarmSetOnNextDay()) {
-            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
-        }
+        time = alarm.getTime();
 
         updateUI();
 
@@ -61,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                calendar.setTimeInMillis(System.currentTimeMillis());
                 calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
                 calendar.set(Calendar.MINUTE, timePicker.getMinute());
                 calendar.set(Calendar.SECOND, 0);
@@ -69,17 +63,13 @@ public class MainActivity extends AppCompatActivity {
 
                 if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
                     calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
-                    alarm.setAlarmSetOnNextDay(true);
-                } else {
-                    alarm.setAlarmSetOnNextDay(false);
                 }
 
-                alarm.setAlarm(getApplicationContext(), calendar);
+                time = calendar.getTimeInMillis();
+                alarm.setTime(time);
                 alarm.setAlarmOn(true);
-                alarm.setHour(calendar.get(Calendar.HOUR_OF_DAY));
-                alarm.setMinute(calendar.get(Calendar.MINUTE));
-
                 repository.updateAlarmClock(alarm);
+                alarmHelper.setAlarm(false);
                 updateUI();
             }
         });
@@ -88,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 alarm.setAlarmOn(false);
-                alarm.setAlarmSetOnNextDay(false);
+                alarm.setTime(time - 60 * 60 * 1000);
                 repository.updateAlarmClock(alarm);
                 updateUI();
             }
@@ -117,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             turnAlarmOff.setVisibility(View.VISIBLE);
             alarmSetStatus.setText(String.format(getResources()
                     .getString(R.string.alarm_status_on), DateFormat
-                    .format("HH.mm\n EEEE, dd MMMM yyyy", calendar).toString()));
+                    .format("HH.mm\n EEEE, dd MMMM yyyy", time).toString()));
             notificationHelper.show();
         }
     }

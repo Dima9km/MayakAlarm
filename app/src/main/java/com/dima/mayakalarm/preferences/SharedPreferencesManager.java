@@ -7,10 +7,8 @@ import com.dima.mayakalarm.model.Alarm;
 
 public class SharedPreferencesManager {
 
-    private final String HOUR = "hour";
-    private final String MINUTE = "minute";
+    private final String TIME = "time";
     private final String IS_ALARM_ON = "is_alarm_on";
-    private final String IS_ALARM_SET_ON_NEXT_DAY = "is_alarm_set_on_next_day";
 
     private final SharedPreferences preferences;
 
@@ -19,18 +17,14 @@ public class SharedPreferencesManager {
     }
 
     public Alarm getAlarmClock() {
-        return new Alarm(preferences.getInt(HOUR, 0),
-                preferences.getInt(MINUTE, 0),
-                preferences.getBoolean(IS_ALARM_ON, false),
-                preferences.getBoolean(IS_ALARM_SET_ON_NEXT_DAY, false));
+        return new Alarm(preferences.getLong(TIME, 0),
+                preferences.getBoolean(IS_ALARM_ON, false));
     }
 
     public void updateAlarmClock(Alarm alarm) {
         preferences.edit()
-                .putInt(HOUR, alarm.getHour())
-                .putInt(MINUTE, alarm.getMinute())
+                .putLong(TIME, alarm.getTime())
                 .putBoolean(IS_ALARM_ON, alarm.isAlarmOn())
-                .putBoolean(IS_ALARM_SET_ON_NEXT_DAY, alarm.isAlarmSetOnNextDay())
                 .apply();
     }
 }
