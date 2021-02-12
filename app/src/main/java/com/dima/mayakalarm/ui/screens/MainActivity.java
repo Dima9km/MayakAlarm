@@ -17,18 +17,21 @@ import com.dima.mayakalarm.util.NotificationHelper;
 
 import java.util.Calendar;
 
+import static java.lang.System.currentTimeMillis;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView alarmSetStatus;
     private Button turnAlarmOn;
     private Button turnAlarmOff;
+    private Button turnAlarmOnTomorrow;
     private TimePicker timePicker;
 
     private Alarm alarm;
-    private long time;
     private final Calendar calendar = Calendar.getInstance();
+    private long time;
     private NotificationHelper notificationHelper;
-    private Repository repository;
+    private Repository repositoryPrefs;
     private AlarmHelper alarmHelper;
 
     @Override
@@ -40,36 +43,36 @@ public class MainActivity extends AppCompatActivity {
         alarmSetStatus = findViewById(R.id.tvAlarmSetStatus);
         turnAlarmOn = findViewById(R.id.btnSetAlarm);
         turnAlarmOff = findViewById(R.id.btnCancelAlarm);
+        turnAlarmOnTomorrow = findViewById(R.id.btnOnTomorrow);
         timePicker = findViewById(R.id.tpTime);
         timePicker.setIs24HourView(true);
 
-        repository = new Repository(this);
+        repositoryPrefs = new Repository(this);
         notificationHelper = new NotificationHelper(this);
         alarmHelper = new AlarmHelper(this);
 
-        alarm = repository.getAlarmClock();
+        alarm = repositoryPrefs.getAlarmClock();
         time = alarm.getTime();
-
         updateUI();
 
         turnAlarmOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                calendar.setTimeInMillis(System.currentTimeMillis());
                 calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
                 calendar.set(Calendar.MINUTE, timePicker.getMinute());
                 calendar.set(Calendar.SECOND, 0);
                 calendar.set(Calendar.MILLISECOND, 0);
 
-                if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+                if (calendar.getTimeInMillis() < currentTimeMillis()) {
                     calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
                 }
 
                 time = calendar.getTimeInMillis();
                 alarm.setTime(time);
                 alarm.setAlarmOn(true);
-                repository.updateAlarmClock(alarm);
-                alarmHelper.setAlarm(false);
+                repositoryPrefs.updateAlarmClock(alarm);
+                alarmHelper.scheduleAlarm(false);
                 updateUI();
             }
         });
@@ -78,8 +81,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 alarm.setAlarmOn(false);
-                alarm.setTime(time - 60 * 60 * 1000);
-                repository.updateAlarmClock(alarm);
+                alarm.setTime(time);
+                repositoryPrefs.updateAlarmClock(alarm);
+                alarmHelper.setAlarmOff();
+                updateUI();
+            }
+        });
+
+        turnAlarmOnTomorrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alarm.setAlarmOn(true);
+                alarm.setTime(time + +(24 * 60 * 60 * 1000));
+                repositoryPrefs.updateAlarmClock(alarm);
+                alarmHelper.scheduleAlarm(false);
                 updateUI();
             }
         });
@@ -92,12 +107,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        if (!alarm.isAlarmOn()) {
+        Alarm alarmToShow = repositoryPrefs.getAlarmClock();
+        if (!alarmToShow.isAlarmOn()) {
+            calendar.setTimeInMillis(alarmToShow.getTime());
             timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
             timePicker.setMinute(calendar.get(Calendar.MINUTE));
             turnAlarmOn.setVisibility(View.VISIBLE);
             timePicker.setVisibility(View.VISIBLE);
             turnAlarmOff.setVisibility(View.GONE);
+            turnAlarmOnTomorrow.setVisibility(View.GONE);
             alarmSetStatus.setText(R.string.alarm_status_off);
             notificationHelper.hide();
 
@@ -105,9 +123,15 @@ public class MainActivity extends AppCompatActivity {
             turnAlarmOn.setVisibility(View.GONE);
             timePicker.setVisibility(View.GONE);
             turnAlarmOff.setVisibility(View.VISIBLE);
-            alarmSetStatus.setText(String.format(getResources()
-                    .getString(R.string.alarm_status_on), DateFormat
-                    .format("HH.mm\n EEEE, dd MMMM yyyy", time).toString()));
+            if (alarmToShow.getTime() < System.currentTimeMillis()) {
+                alarmSetStatus.setText("Будильник отложен на 10 минут");
+                turnAlarmOnTomorrow.setVisibility(View.VISIBLE);
+            } else {
+                alarmSetStatus.setText(String.format(getResources()
+                        .getString(R.string.alarm_status_on), DateFormat
+                        .format("HH.mm\n EEEE, dd MMMM yyyy", alarmToShow.getTime()).toString()));
+                turnAlarmOnTomorrow.setVisibility(View.GONE);
+            }
             notificationHelper.show();
         }
     }

@@ -12,11 +12,9 @@ import com.dima.mayakalarm.remote.RemoteInfoListener;
 public class Repository {
 
     private RepositoryListener repositoryListener;
-    private Context context;
     private SharedPreferencesManager sharedPreferencesManager;
 
     public Repository(Context context) {
-        this.context = context;
         sharedPreferencesManager = new SharedPreferencesManager(PreferenceManager.getDefaultSharedPreferences(context));
     }
 

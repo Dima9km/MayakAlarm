@@ -2,6 +2,7 @@
     <string name="app_name">1stAlarm</string>
     <string name="set_alarm">Включить</string>
     <string name="cancel_alarm">Выключить</string>
+    <string name="cancel_alarm_on_tomorrow">Отложить на завтра</string>
     <string name="snooze_10_min">Отложить на 10 мин.</string>
     <string name="dismiss">Отложить на завтра</string>
     <string name="alarm_status_on">Будильник включён на %s</string>

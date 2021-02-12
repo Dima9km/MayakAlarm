@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dima.mayakalarm.R;
+import com.dima.mayakalarm.model.Alarm;
 import com.dima.mayakalarm.model.InfoToShow;
 import com.dima.mayakalarm.repository.Repository;
 import com.dima.mayakalarm.repository.RepositoryListener;
@@ -63,6 +64,12 @@ public class AlarmRingingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_ringing);
 
+        alarmHelper = new AlarmHelper(getApplicationContext());
+        player = new Player(this);
+
+        Repository repositoryPrefs = new Repository(getApplicationContext());
+        Alarm alarm = repositoryPrefs.getAlarmClock();
+
         Button dismissButton = findViewById(R.id.btnDismiss);
         Button snoozeButton = findViewById(R.id.btnSnooze);
         weatherText = findViewById(R.id.tvWeather);
@@ -70,15 +77,17 @@ public class AlarmRingingActivity extends AppCompatActivity {
         imageDaily = findViewById(R.id.ivPicture);
 
         turnBacklightOn();
-
-        player = new Player(this);
         player.play();
-
         repository.getInfoToShow();
 
         dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long time = alarm.getTime() + (24 * 60 * 60 * 1000);
+                alarm.setTime(time);
+                alarm.setAlarmOn(true);
+                repositoryPrefs.updateAlarmClock(alarm);
+                alarmHelper.scheduleAlarm(false);
                 player.stop();
                 finish();
             }
@@ -87,8 +96,7 @@ public class AlarmRingingActivity extends AppCompatActivity {
         snoozeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alarmHelper = new AlarmHelper(getApplicationContext());
-                alarmHelper.setAlarm(true);
+                alarmHelper.scheduleAlarm(true);
                 player.stop();
                 finish();
             }

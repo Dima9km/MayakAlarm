@@ -14,18 +14,19 @@ import com.dima.mayakalarm.repository.Repository;
 public class AlarmHelper {
 
     private final Context context;
+    private final AlarmManager alarmManager;
 
     public AlarmHelper(Context context) {
         this.context = context;
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    public void setAlarm(boolean isAlarmSnoozed) {
-
-        Repository repository = new Repository(context);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    public void scheduleAlarm(boolean isAlarmSnoozed) {
+        Repository repositoryPrefs = new Repository(context);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-        Alarm alarm = repository.getAlarmClock();
+        NotificationHelper notificationHelper = new NotificationHelper(context);
+        Alarm alarm = repositoryPrefs.getAlarmClock();
         long timeToSet = alarm.getTime();
         long time;
 
@@ -35,16 +36,29 @@ public class AlarmHelper {
             time = timeToSet;
         }
 
-        alarmManager.setAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                time,
-                pendingIntent
-        );
+        if (alarm.isAlarmOn()) {
+            alarmManager.setAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    time,
+                    pendingIntent
+            );
 
-        String toastText = String.format(context.getResources()
-                .getString(R.string.alarm_status_on), DateFormat
-                .format("HH.mm\n EEEE, dd MMMM yyyy", time).toString());
-        Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
+            String toastText = String.format(context.getResources()
+                    .getString(R.string.alarm_status_on), DateFormat
+                    .format("HH.mm\n EEEE, dd MMMM yyyy", time).toString());
+            Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
 
+            alarm.setAlarmOn(true);
+            alarm.setTime(timeToSet);
+            repositoryPrefs.updateAlarmClock(alarm);
+            notificationHelper.show();
+        }
+    }
+
+    public void setAlarmOff() {
+        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        alarmManager.cancel(pendingIntent);
+        Toast.makeText(context, "Будильник выключен", Toast.LENGTH_LONG).show();
     }
 }
