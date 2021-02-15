@@ -21,7 +21,6 @@ public class AlarmHelper {
     private final AlarmManager alarmManager;
     private final Repository repositoryPrefs;
     private final PendingIntent pendingIntent;
-    private final NotificationHelper notificationHelper;
     private final Alarm alarm;
     private final Calendar calendar = Calendar.getInstance();
 
@@ -31,7 +30,6 @@ public class AlarmHelper {
         repositoryPrefs = new Repository(context);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-        notificationHelper = new NotificationHelper(context);
         alarm = repositoryPrefs.getAlarmClock();
     }
 
@@ -52,7 +50,6 @@ public class AlarmHelper {
         alarm.setTime(time);
         repositoryPrefs.updateAlarmClock(alarm);
         scheduleAlarmManager(time);
-        notificationHelper.show();
     }
 
     public void scheduleSnoozedAlarm() {
@@ -90,7 +87,6 @@ public class AlarmHelper {
                     .getString(R.string.alarm_status_on), DateFormat
                     .format("HH.mm\n EEEE, dd MMMM yyyy", time).toString());
             Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
-            notificationHelper.show();
         }
     }
 }

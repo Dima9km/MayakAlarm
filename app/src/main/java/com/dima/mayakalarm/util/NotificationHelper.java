@@ -21,6 +21,7 @@ public class NotificationHelper {
         return new NotificationCompat.Builder(context.getApplicationContext(), CHANNEL_ID)
                 .setContentText("Будильник включён")
                 .setSmallIcon(R.drawable.ic_alarm_notification)
+                .setOngoing(true)
                 .build();
     }
 
