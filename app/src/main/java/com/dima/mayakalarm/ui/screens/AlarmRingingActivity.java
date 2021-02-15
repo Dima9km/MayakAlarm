@@ -83,11 +83,7 @@ public class AlarmRingingActivity extends AppCompatActivity {
         dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long time = alarm.getTime() + (24 * 60 * 60 * 1000);
-                alarm.setTime(time);
-                alarm.setAlarmOn(true);
-                repositoryPrefs.updateAlarmClock(alarm);
-                alarmHelper.scheduleAlarm(false);
+                alarmHelper.scheduleNextDayAlarm();
                 player.stop();
                 finish();
             }
@@ -96,7 +92,7 @@ public class AlarmRingingActivity extends AppCompatActivity {
         snoozeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alarmHelper.scheduleAlarm(true);
+                alarmHelper.scheduleSnoozedAlarm();
                 player.stop();
                 finish();
             }

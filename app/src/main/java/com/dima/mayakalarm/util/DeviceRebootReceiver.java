@@ -8,7 +8,7 @@ public class DeviceRebootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         AlarmHelper alarmHelper = new AlarmHelper(context);
-        alarmHelper.scheduleAlarm(false);
+        alarmHelper.scheduleCurrentAlarm();
     }
 }
 

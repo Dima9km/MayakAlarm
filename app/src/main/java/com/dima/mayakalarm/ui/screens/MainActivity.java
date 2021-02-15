@@ -17,8 +17,6 @@ import com.dima.mayakalarm.util.NotificationHelper;
 
 import java.util.Calendar;
 
-import static java.lang.System.currentTimeMillis;
-
 public class MainActivity extends AppCompatActivity {
 
     private TextView alarmSetStatus;
@@ -27,9 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private Button turnAlarmOnTomorrow;
     private TimePicker timePicker;
 
-    private Alarm alarm;
-    private final Calendar calendar = Calendar.getInstance();
-    private long time;
     private NotificationHelper notificationHelper;
     private Repository repositoryPrefs;
     private AlarmHelper alarmHelper;
@@ -51,28 +46,12 @@ public class MainActivity extends AppCompatActivity {
         notificationHelper = new NotificationHelper(this);
         alarmHelper = new AlarmHelper(this);
 
-        alarm = repositoryPrefs.getAlarmClock();
-        time = alarm.getTime();
         updateUI();
 
         turnAlarmOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
-                calendar.set(Calendar.MINUTE, timePicker.getMinute());
-                calendar.set(Calendar.SECOND, 0);
-                calendar.set(Calendar.MILLISECOND, 0);
-
-                if (calendar.getTimeInMillis() < currentTimeMillis()) {
-                    calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
-                }
-
-                time = calendar.getTimeInMillis();
-                alarm.setTime(time);
-                alarm.setAlarmOn(true);
-                repositoryPrefs.updateAlarmClock(alarm);
-                alarmHelper.scheduleAlarm(false);
+                alarmHelper.scheduleAlarm(timePicker.getHour(), timePicker.getMinute());
                 updateUI();
             }
         });
@@ -80,9 +59,6 @@ public class MainActivity extends AppCompatActivity {
         turnAlarmOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alarm.setAlarmOn(false);
-                alarm.setTime(time);
-                repositoryPrefs.updateAlarmClock(alarm);
                 alarmHelper.setAlarmOff();
                 updateUI();
             }
@@ -91,10 +67,7 @@ public class MainActivity extends AppCompatActivity {
         turnAlarmOnTomorrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alarm.setAlarmOn(true);
-                alarm.setTime(time + +(24 * 60 * 60 * 1000));
-                repositoryPrefs.updateAlarmClock(alarm);
-                alarmHelper.scheduleAlarm(false);
+                alarmHelper.scheduleNextDayAlarm();
                 updateUI();
             }
         });
@@ -109,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI() {
         Alarm alarmToShow = repositoryPrefs.getAlarmClock();
         if (!alarmToShow.isAlarmOn()) {
+            Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(alarmToShow.getTime());
             timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
             timePicker.setMinute(calendar.get(Calendar.MINUTE));
@@ -124,7 +98,9 @@ public class MainActivity extends AppCompatActivity {
             timePicker.setVisibility(View.GONE);
             turnAlarmOff.setVisibility(View.VISIBLE);
             if (alarmToShow.getTime() < System.currentTimeMillis()) {
-                alarmSetStatus.setText("Будильник отложен на 10 минут");
+                alarmSetStatus.setText(String.format(getResources()
+                        .getString(R.string.alarm_status_on), DateFormat
+                        .format("HH.mm\n EEEE, dd MMMM yyyy", alarmToShow.getTime() + 10 * 60 * 1000).toString()));
                 turnAlarmOnTomorrow.setVisibility(View.VISIBLE);
             } else {
                 alarmSetStatus.setText(String.format(getResources()
