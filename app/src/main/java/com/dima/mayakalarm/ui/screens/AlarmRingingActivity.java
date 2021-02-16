@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dima.mayakalarm.R;
-import com.dima.mayakalarm.model.Alarm;
 import com.dima.mayakalarm.model.InfoToShow;
 import com.dima.mayakalarm.repository.Repository;
 import com.dima.mayakalarm.repository.RepositoryListener;
@@ -66,9 +65,6 @@ public class AlarmRingingActivity extends AppCompatActivity {
 
         alarmHelper = new AlarmHelper(getApplicationContext());
         player = new Player(this);
-
-        Repository repositoryPrefs = new Repository(getApplicationContext());
-        Alarm alarm = repositoryPrefs.getAlarmClock();
 
         Button dismissButton = findViewById(R.id.btnDismiss);
         Button snoozeButton = findViewById(R.id.btnSnooze);
