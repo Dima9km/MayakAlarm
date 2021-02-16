@@ -49,6 +49,8 @@ public class AlarmRingingActivity extends AppCompatActivity {
         @Override
         public void onError(String message) {
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            weatherText.setText("У природы нет плохой погоды");
+            imageDaily.setImageResource(R.drawable.galaxy);
         }
 
         @Override
@@ -76,22 +78,16 @@ public class AlarmRingingActivity extends AppCompatActivity {
         player.play();
         repository.getInfoToShow();
 
-        dismissButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alarmHelper.scheduleNextDayAlarm();
-                player.stop();
-                finish();
-            }
+        dismissButton.setOnClickListener(v -> {
+            alarmHelper.scheduleNextDayAlarm();
+            player.stop();
+            finish();
         });
 
-        snoozeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alarmHelper.scheduleSnoozedAlarm();
-                player.stop();
-                finish();
-            }
+        snoozeButton.setOnClickListener(v -> {
+            alarmHelper.scheduleSnoozedAlarm();
+            player.stop();
+            finish();
         });
     }
 
