@@ -26,11 +26,16 @@ public class AlarmHelper {
 
     public AlarmHelper(Context context) {
         this.context = context;
+
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         repositoryPrefs = new Repository(context);
-        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
         alarm = repositoryPrefs.getAlarmClock();
+
+        pendingIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, AlarmBroadcastReceiver.class), 0);
+    }
+
+    public Alarm getAlarm() {
+        return repositoryPrefs.getAlarmClock();
     }
 
     public void scheduleAlarm(int hour, int minute) {

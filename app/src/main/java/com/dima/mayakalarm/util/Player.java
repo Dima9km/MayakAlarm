@@ -33,7 +33,6 @@ public class Player {
 
         mediaPlayer = MediaPlayer.create(context, R.raw.alarm);
         mediaPlayer.setLooping(true);
-
     }
 
     public void play() {

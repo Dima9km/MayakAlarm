@@ -10,8 +10,6 @@ import android.widget.TimePicker;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dima.mayakalarm.R;
-import com.dima.mayakalarm.model.Alarm;
-import com.dima.mayakalarm.repository.Repository;
 import com.dima.mayakalarm.util.AlarmHelper;
 import com.dima.mayakalarm.util.NotificationHelper;
 
@@ -19,14 +17,13 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView alarmSetStatus;
-    private Button turnAlarmOn;
-    private Button turnAlarmOff;
-    private Button turnAlarmOnTomorrow;
-    private TimePicker timePicker;
+    private TextView tvAlarmStatus;
+    private Button btnSetAlarm;
+    private Button btnCancelAlarm;
+    private Button btnOnTomorrow;
+    private TimePicker tpTime;
 
     private NotificationHelper notificationHelper;
-    private Repository repositoryPrefs;
     private AlarmHelper alarmHelper;
 
     @Override
@@ -35,41 +32,31 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        alarmSetStatus = findViewById(R.id.tvAlarmSetStatus);
-        turnAlarmOn = findViewById(R.id.btnSetAlarm);
-        turnAlarmOff = findViewById(R.id.btnCancelAlarm);
-        turnAlarmOnTomorrow = findViewById(R.id.btnOnTomorrow);
-        timePicker = findViewById(R.id.tpTime);
-        timePicker.setIs24HourView(true);
+        tvAlarmStatus = findViewById(R.id.tvAlarmSetStatus);
+        btnSetAlarm = findViewById(R.id.btnSetAlarm);
+        btnCancelAlarm = findViewById(R.id.btnCancelAlarm);
+        btnOnTomorrow = findViewById(R.id.btnOnTomorrow);
+        tpTime = findViewById(R.id.tpTime);
+        tpTime.setIs24HourView(true);
 
-        repositoryPrefs = new Repository(this);
         notificationHelper = new NotificationHelper(this);
         alarmHelper = new AlarmHelper(this);
 
         updateUI();
 
-        turnAlarmOn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alarmHelper.scheduleAlarm(timePicker.getHour(), timePicker.getMinute());
-                updateUI();
-            }
+        btnSetAlarm.setOnClickListener(v -> {
+            alarmHelper.scheduleAlarm(tpTime.getHour(), tpTime.getMinute());
+            updateUI();
         });
 
-        turnAlarmOff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alarmHelper.setAlarmOff();
-                updateUI();
-            }
+        btnCancelAlarm.setOnClickListener(v -> {
+            alarmHelper.setAlarmOff();
+            updateUI();
         });
 
-        turnAlarmOnTomorrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alarmHelper.scheduleNextDayAlarm();
-                updateUI();
-            }
+        btnOnTomorrow.setOnClickListener(v -> {
+            alarmHelper.scheduleNextDayAlarm();
+            updateUI();
         });
     }
 
@@ -80,33 +67,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        Alarm alarmToShow = repositoryPrefs.getAlarmClock();
-        if (!alarmToShow.isAlarmOn()) {
+
+        long time = alarmHelper.getAlarm().getTime();
+
+        if (!alarmHelper.getAlarm().isAlarmOn()) {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(alarmToShow.getTime());
-            timePicker.setHour(calendar.get(Calendar.HOUR_OF_DAY));
-            timePicker.setMinute(calendar.get(Calendar.MINUTE));
-            turnAlarmOn.setVisibility(View.VISIBLE);
-            timePicker.setVisibility(View.VISIBLE);
-            turnAlarmOff.setVisibility(View.GONE);
-            turnAlarmOnTomorrow.setVisibility(View.GONE);
-            alarmSetStatus.setText(R.string.alarm_status_off);
+            calendar.setTimeInMillis(time);
+            tpTime.setHour(calendar.get(Calendar.HOUR_OF_DAY));
+            tpTime.setMinute(calendar.get(Calendar.MINUTE));
+            btnSetAlarm.setVisibility(View.VISIBLE);
+            tpTime.setVisibility(View.VISIBLE);
+            btnCancelAlarm.setVisibility(View.GONE);
+            btnOnTomorrow.setVisibility(View.GONE);
+            tvAlarmStatus.setText(R.string.alarm_status_off);
             notificationHelper.hide();
 
         } else {
-            turnAlarmOn.setVisibility(View.GONE);
-            timePicker.setVisibility(View.GONE);
-            turnAlarmOff.setVisibility(View.VISIBLE);
-            if (alarmToShow.getTime() < System.currentTimeMillis()) {
-                alarmSetStatus.setText(String.format(getResources()
+            btnSetAlarm.setVisibility(View.GONE);
+            tpTime.setVisibility(View.GONE);
+            btnCancelAlarm.setVisibility(View.VISIBLE);
+            if (time < System.currentTimeMillis()) {
+                tvAlarmStatus.setText(String.format(getResources()
                         .getString(R.string.alarm_status_on), DateFormat
-                        .format("HH.mm\n EEEE, dd MMMM yyyy", alarmToShow.getTime() + 10 * 60 * 1000).toString()));
-                turnAlarmOnTomorrow.setVisibility(View.VISIBLE);
+                        .format("HH.mm\n EEEE, dd MMMM yyyy", time + 10 * 60 * 1000).toString()));
+                btnOnTomorrow.setVisibility(View.VISIBLE);
             } else {
-                alarmSetStatus.setText(String.format(getResources()
+                tvAlarmStatus.setText(String.format(getResources()
                         .getString(R.string.alarm_status_on), DateFormat
-                        .format("HH.mm\n EEEE, dd MMMM yyyy", alarmToShow.getTime()).toString()));
-                turnAlarmOnTomorrow.setVisibility(View.GONE);
+                        .format("HH.mm\n EEEE, dd MMMM yyyy", time).toString()));
+                btnOnTomorrow.setVisibility(View.GONE);
             }
             notificationHelper.show();
         }

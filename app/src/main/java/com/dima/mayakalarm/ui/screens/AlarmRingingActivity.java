@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,9 +23,9 @@ import com.squareup.picasso.Picasso;
 
 public class AlarmRingingActivity extends AppCompatActivity {
 
-    private TextView weatherText;
-    private ImageView imageDaily;
-    private ProgressBar preloader;
+    private TextView tvWeather;
+    private ImageView ivPicture;
+    private ProgressBar pbPreloader;
     private AlarmHelper alarmHelper;
 
     private Player player;
@@ -35,27 +34,27 @@ public class AlarmRingingActivity extends AppCompatActivity {
 
         @Override
         public void onStartDownload() {
-            preloader.setVisibility(View.VISIBLE);
+            pbPreloader.setVisibility(View.VISIBLE);
         }
 
         @Override
         public void onGetRemoteInfo(InfoToShow infoToShow) {
-            weatherText.setText(infoToShow.getCurrentWeather());
+            tvWeather.setText(infoToShow.getCurrentWeather());
             Picasso.with(getApplicationContext())
                     .load(infoToShow.getImageUrl())
-                    .into(imageDaily);
+                    .into(ivPicture);
         }
 
         @Override
         public void onError(String message) {
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-            weatherText.setText("У природы нет плохой погоды");
-            imageDaily.setImageResource(R.drawable.galaxy);
+            tvWeather.setText("У природы нет плохой погоды");
+            ivPicture.setImageResource(R.drawable.galaxy);
+            repository.getInfoToShow();
         }
 
         @Override
         public void onEndDownload() {
-            preloader.setVisibility(View.GONE);
+            pbPreloader.setVisibility(View.GONE);
         }
     });
 
@@ -68,23 +67,23 @@ public class AlarmRingingActivity extends AppCompatActivity {
         alarmHelper = new AlarmHelper(getApplicationContext());
         player = new Player(this);
 
-        Button dismissButton = findViewById(R.id.btnDismiss);
-        Button snoozeButton = findViewById(R.id.btnSnooze);
-        weatherText = findViewById(R.id.tvWeather);
-        preloader = findViewById(R.id.pbPreloader);
-        imageDaily = findViewById(R.id.ivPicture);
+        Button btnDismiss = findViewById(R.id.btnDismiss);
+        Button btnSnooze = findViewById(R.id.btnSnooze);
+        tvWeather = findViewById(R.id.tvWeather);
+        pbPreloader = findViewById(R.id.pbPreloader);
+        ivPicture = findViewById(R.id.ivPicture);
 
         turnBacklightOn();
         player.play();
         repository.getInfoToShow();
 
-        dismissButton.setOnClickListener(v -> {
+        btnDismiss.setOnClickListener(v -> {
             alarmHelper.scheduleNextDayAlarm();
             player.stop();
             finish();
         });
 
-        snoozeButton.setOnClickListener(v -> {
+        btnSnooze.setOnClickListener(v -> {
             alarmHelper.scheduleSnoozedAlarm();
             player.stop();
             finish();
