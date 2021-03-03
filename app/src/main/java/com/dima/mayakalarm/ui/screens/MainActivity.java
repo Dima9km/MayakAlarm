@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.dima.mayakalarm.R;
 import com.dima.mayakalarm.util.AlarmHelper;
+import com.dima.mayakalarm.util.LanguageSwitcher;
 import com.dima.mayakalarm.util.NotificationHelper;
 
 import java.util.Calendar;
@@ -18,6 +19,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity {
 
     private TextView tvAlarmStatus;
+    private Button btnSetLang;
     private Button btnSetAlarm;
     private Button btnCancelAlarm;
     private Button btnOnTomorrow;
@@ -25,24 +27,30 @@ public class MainActivity extends AppCompatActivity {
 
     private NotificationHelper notificationHelper;
     private AlarmHelper alarmHelper;
+    private LanguageSwitcher languageSwitcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        notificationHelper = new NotificationHelper(this);
+        alarmHelper = new AlarmHelper(this);
+        languageSwitcher = new LanguageSwitcher(this);
 
+        setContentView(R.layout.activity_main);
         tvAlarmStatus = findViewById(R.id.tvAlarmSetStatus);
+        btnSetLang = findViewById(R.id.btnSetLang);
         btnSetAlarm = findViewById(R.id.btnSetAlarm);
         btnCancelAlarm = findViewById(R.id.btnCancelAlarm);
         btnOnTomorrow = findViewById(R.id.btnOnTomorrow);
         tpTime = findViewById(R.id.tpTime);
         tpTime.setIs24HourView(true);
 
-        notificationHelper = new NotificationHelper(this);
-        alarmHelper = new AlarmHelper(this);
-
-        updateUI();
+        btnSetLang.setOnClickListener(v -> {
+            languageSwitcher.switchLanguage();
+            recreate();
+            updateUI();
+        });
 
         btnSetAlarm.setOnClickListener(v -> {
             alarmHelper.scheduleAlarm(tpTime.getHour(), tpTime.getMinute());
@@ -67,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-
         long time = alarmHelper.getAlarm().getTime();
+        btnSetLang.setText(alarmHelper.getAlarm().getLanguage());
 
         if (!alarmHelper.getAlarm().isAlarmOn()) {
             Calendar calendar = Calendar.getInstance();

@@ -77,7 +77,7 @@ public class AlarmHelper {
         alarmManager.cancel(pendingIntent);
         alarm.setAlarmOn(false);
         repositoryPrefs.updateAlarmClock(alarm);
-        Toast.makeText(context, "Будильник выключен", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, R.string.alarm_is_off, Toast.LENGTH_LONG).show();
     }
 
     private void scheduleAlarmManager(long time) {

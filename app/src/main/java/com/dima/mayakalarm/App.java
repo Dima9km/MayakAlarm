@@ -19,7 +19,7 @@ public class App extends Application {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
                     CHANNEL_ID,
-                    "Будильник включён",
+                    getString(R.string.alarm_is_on_notification),
                     NotificationManager.IMPORTANCE_LOW
             );
             serviceChannel.setSound(null, null);

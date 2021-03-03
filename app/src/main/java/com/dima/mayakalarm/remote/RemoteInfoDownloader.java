@@ -9,6 +9,8 @@ import com.dima.mayakalarm.network.ImageApi;
 import com.dima.mayakalarm.network.NetworkHelper;
 import com.dima.mayakalarm.network.WeatherApi;
 
+import java.util.Locale;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,7 +21,7 @@ public class RemoteInfoDownloader {
     final String lat = "51.6664";
     final String lon = "39.17";
     final String units = "metric";
-    final String lang = "ru";
+    private final String lang = getCurrentLang();
 
     final InfoToShow infoToShow = new InfoToShow();
 
@@ -38,9 +40,9 @@ public class RemoteInfoDownloader {
                     WeatherResponse weatherResponse = response.body();
                     assert weatherResponse != null;
                     getRemoteImage(remoteInfoListener);
-                    String currentWeather =
+                    String currentWeatherRu =
                             "Температура: " +
-                                    weatherResponse.main.temp + " C" +
+                                    weatherResponse.main.temp + " °C" +
                                     "\n" +
                                     "Влажность: " +
                                     weatherResponse.main.humidity + " %" +
@@ -48,11 +50,24 @@ public class RemoteInfoDownloader {
                                     "Чо как: пока " +
                                     weatherResponse.weather.get(0).description +
                                     "\n" +
-                                    "Ветерок: " +
+                                    "Ветер: " +
                                     weatherResponse.wind.speed + " м/с";
 
-                    infoToShow.setCurrentWeather(currentWeather);
+                    String currentWeatherEn =
+                            "Temperature: " +
+                                    weatherResponse.main.temp + " °C" +
+                                    "\n" +
+                                    "Humidity: " +
+                                    weatherResponse.main.humidity + " %" +
+                                    "\n" +
+                                    "What's up: still " +
+                                    weatherResponse.weather.get(0).description +
+                                    "\n" +
+                                    "Wind: " +
+                                    weatherResponse.wind.speed + " m/s";
 
+                    infoToShow.setCurrentWeather(lang.equals("ru") ? currentWeatherRu :
+                            currentWeatherEn);
 
                     remoteInfoListener.onGetData(infoToShow);
                 }
@@ -82,6 +97,10 @@ public class RemoteInfoDownloader {
                 remoteInfoListener.onError(t.getMessage());
             }
         });
+    }
+
+    private String getCurrentLang() {
+        return Locale.getDefault().getLanguage();
     }
 }
 

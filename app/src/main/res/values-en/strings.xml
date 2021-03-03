@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">1stAlarm</string>
+    <string name="set_alarm">Set Alarm</string>
+    <string name="cancel_alarm">Cancel Alarm</string>
+    <string name="cancel_alarm_on_tomorrow">Set on tomorrow</string>
+    <string name="snooze_10_min">Snooze for 10 min.</string>
+    <string name="dismiss">Set on tomorrow</string>
+    <string name="alarm_status_on">Alarm set on %s</string>
+    <string name="alarm_status_off">Alarm is off</string>
+    <string name="alarm_is_on">Alarm is on</string>
+    <string name="empty_state_text">Weather never bad!</string>
+    <string name="alarm_is_off">Alarm is off</string>
+    <string name="alarm_is_on_notification">Alarm is on</string>
+    <string name="language_en">En</string>
+    <string name="language_ru">Ru</string>
+</resources>

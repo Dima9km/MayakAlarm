@@ -19,7 +19,7 @@ public class NotificationHelper {
 
     public Notification getNotification() {
         return new NotificationCompat.Builder(context.getApplicationContext(), CHANNEL_ID)
-                .setContentText("Будильник включён")
+                .setContentText(context.getString(R.string.alarm_is_on))
                 .setSmallIcon(R.drawable.ic_alarm_notification)
                 .setOngoing(true)
                 .build();

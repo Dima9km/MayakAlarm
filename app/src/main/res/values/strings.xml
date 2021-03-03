@@ -7,4 +7,10 @@
     <string name="dismiss">Отложить на завтра</string>
     <string name="alarm_status_on">Будильник включён на %s</string>
     <string name="alarm_status_off">Будильник выключен</string>
+    <string name="alarm_is_on">Будильник включён</string>
+    <string name="empty_state_text">У природы нет плохой погоды</string>
+    <string name="alarm_is_off">Будильник выключен</string>
+    <string name="alarm_is_on_notification">Будильник включён</string>
+    <string name="language_en">En</string>
+    <string name="language_ru">Ru</string>
 </resources>

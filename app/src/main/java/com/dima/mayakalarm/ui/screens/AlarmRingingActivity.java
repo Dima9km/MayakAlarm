@@ -47,7 +47,7 @@ public class AlarmRingingActivity extends AppCompatActivity {
 
         @Override
         public void onError(String message) {
-            tvWeather.setText("У природы нет плохой погоды");
+            tvWeather.setText(R.string.empty_state_text);
             ivPicture.setImageResource(R.drawable.galaxy);
             repository.getInfoToShow();
         }
