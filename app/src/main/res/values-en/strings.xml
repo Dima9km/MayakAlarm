@@ -13,4 +13,6 @@
     <string name="alarm_is_on_notification">Alarm is on</string>
     <string name="language_en">En</string>
     <string name="language_ru">Ru</string>
+    <string name="weather">Temperature: %d°C \nHumidity: %d %% \nWhats up: still %s\nWind: %d m/s</string>
+
 </resources>

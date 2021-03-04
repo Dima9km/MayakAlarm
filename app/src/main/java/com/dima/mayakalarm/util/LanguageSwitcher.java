@@ -17,8 +17,8 @@ public class LanguageSwitcher {
     }
 
     public void switchLanguage() {
-        Repository repositoryPrefs = new Repository(context);
-        Alarm alarm = repositoryPrefs.getAlarmClock();
+        Repository repository = new Repository(context);
+        Alarm alarm = repository.getAlarmClock();
         String currentLang = alarm.getLanguage();
 
         if (currentLang.equals("en")) {
@@ -28,7 +28,7 @@ public class LanguageSwitcher {
             config.locale = localeRu;
             context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
             alarm.setLanguage("ru");
-            repositoryPrefs.updateAlarmClock(alarm);
+            repository.updateAlarmClock(alarm);
 
         } else {
             Locale localeEn = new Locale("en", "EN");
@@ -37,7 +37,7 @@ public class LanguageSwitcher {
             config.locale = localeEn;
             context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
             alarm.setLanguage("en");
-            repositoryPrefs.updateAlarmClock(alarm);
+            repository.updateAlarmClock(alarm);
         }
     }
 }

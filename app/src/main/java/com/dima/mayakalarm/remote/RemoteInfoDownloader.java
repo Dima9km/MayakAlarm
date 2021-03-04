@@ -9,29 +9,21 @@ import com.dima.mayakalarm.network.ImageApi;
 import com.dima.mayakalarm.network.NetworkHelper;
 import com.dima.mayakalarm.network.WeatherApi;
 
-import java.util.Locale;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RemoteInfoDownloader {
 
-    final String AppId = "f52cbda5d0f59d7559eb126d5fc0e0e2";
-    final String lat = "51.6664";
-    final String lon = "39.17";
-    final String units = "metric";
-    private final String lang = getCurrentLang();
+    private final InfoToShow infoToShow = new InfoToShow();
 
-    final InfoToShow infoToShow = new InfoToShow();
-
-    WeatherApi weatherApi = NetworkHelper.getInstance().retrofitWeather.create(WeatherApi.class);
-    Call<WeatherResponse> callWeather = weatherApi.getWeatherData(lat, lon, AppId, units, lang);
-
-    ImageApi imageApi = NetworkHelper.getInstance().retrofitImage.create(ImageApi.class);
-    Call<FlikrImage> callImage = imageApi.getImageUrl();
-
-    public void getInfoToShow(RemoteInfoListener remoteInfoListener) {
+    public void getInfoToShow(RemoteInfoListener remoteInfoListener, String lang) {
+        WeatherApi weatherApi = NetworkHelper.getInstance().retrofitWeather.create(WeatherApi.class);
+        String units = "metric";
+        String lon = "39.17";
+        String lat = "51.6664";
+        String appId = "f52cbda5d0f59d7559eb126d5fc0e0e2";
+        Call<WeatherResponse> callWeather = weatherApi.getWeatherData(lat, lon, appId, units, lang);
 
         callWeather.enqueue(new Callback<WeatherResponse>() {
             @Override
@@ -40,36 +32,11 @@ public class RemoteInfoDownloader {
                     WeatherResponse weatherResponse = response.body();
                     assert weatherResponse != null;
                     getRemoteImage(remoteInfoListener);
-                    String currentWeatherRu =
-                            "Температура: " +
-                                    weatherResponse.main.temp + " °C" +
-                                    "\n" +
-                                    "Влажность: " +
-                                    weatherResponse.main.humidity + " %" +
-                                    "\n" +
-                                    "Чо как: пока " +
-                                    weatherResponse.weather.get(0).description +
-                                    "\n" +
-                                    "Ветер: " +
-                                    weatherResponse.wind.speed + " м/с";
 
-                    String currentWeatherEn =
-                            "Temperature: " +
-                                    weatherResponse.main.temp + " °C" +
-                                    "\n" +
-                                    "Humidity: " +
-                                    weatherResponse.main.humidity + " %" +
-                                    "\n" +
-                                    "What's up: still " +
-                                    weatherResponse.weather.get(0).description +
-                                    "\n" +
-                                    "Wind: " +
-                                    weatherResponse.wind.speed + " m/s";
-
-                    infoToShow.setCurrentWeather(lang.equals("ru") ? currentWeatherRu :
-                            currentWeatherEn);
-
-                    remoteInfoListener.onGetData(infoToShow);
+                    remoteInfoListener.onGetData(weatherResponse.main.temp,
+                            weatherResponse.main.humidity,
+                            weatherResponse.weather.get(0).description,
+                            weatherResponse.wind.speed);
                 }
             }
 
@@ -81,14 +48,15 @@ public class RemoteInfoDownloader {
     }
 
     public void getRemoteImage(RemoteInfoListener remoteInfoListener) {
-
+        ImageApi imageApi = NetworkHelper.getInstance().retrofitImage.create(ImageApi.class);
+        Call<FlikrImage> callImage = imageApi.getImageUrl();
         callImage.enqueue(new Callback<FlikrImage>() {
             @Override
             public void onResponse(@NonNull Call<FlikrImage> call, @NonNull Response<FlikrImage> response) {
                 if (response.code() == 200) {
                     FlikrImage flikrImage = response.body();
                     infoToShow.setImageUrl(flikrImage.getFile());
-                    remoteInfoListener.onGetData(infoToShow);
+                    remoteInfoListener.onGetImageData(infoToShow);
                 }
             }
 
@@ -97,10 +65,6 @@ public class RemoteInfoDownloader {
                 remoteInfoListener.onError(t.getMessage());
             }
         });
-    }
-
-    private String getCurrentLang() {
-        return Locale.getDefault().getLanguage();
     }
 }
 

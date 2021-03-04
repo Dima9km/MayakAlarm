@@ -6,7 +6,9 @@ public interface RepositoryListener {
 
     void onStartDownload();
 
-    void onGetRemoteInfo(InfoToShow infoToShow);
+    void onGetRemoteInfo(int temp, int humidity, String description, int windSpeed);
+
+    void onGetImageInfo(InfoToShow infoToShow);
 
     void onError(String message);
 

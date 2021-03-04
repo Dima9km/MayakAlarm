@@ -19,7 +19,7 @@ public class AlarmHelper {
 
     private final Context context;
     private final AlarmManager alarmManager;
-    private final Repository repositoryPrefs;
+    private final Repository repository;
     private final PendingIntent pendingIntent;
     private final Alarm alarm;
     private final Calendar calendar = Calendar.getInstance();
@@ -28,14 +28,14 @@ public class AlarmHelper {
         this.context = context;
 
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        repositoryPrefs = new Repository(context);
-        alarm = repositoryPrefs.getAlarmClock();
+        repository = new Repository(context);
+        alarm = repository.getAlarmClock();
 
         pendingIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, AlarmBroadcastReceiver.class), 0);
     }
 
     public Alarm getAlarm() {
-        return repositoryPrefs.getAlarmClock();
+        return repository.getAlarmClock();
     }
 
     public void scheduleAlarm(int hour, int minute) {
@@ -53,7 +53,7 @@ public class AlarmHelper {
 
         alarm.setAlarmOn(true);
         alarm.setTime(time);
-        repositoryPrefs.updateAlarmClock(alarm);
+        repository.updateAlarmClock(alarm);
         scheduleAlarmManager(time);
     }
 
@@ -65,7 +65,7 @@ public class AlarmHelper {
         long time = alarm.getTime() + (24 * 60 * 60 * 1000);
         alarm.setTime(time);
         alarm.setAlarmOn(true);
-        repositoryPrefs.updateAlarmClock(alarm);
+        repository.updateAlarmClock(alarm);
         scheduleAlarmManager(time);
     }
 
@@ -76,7 +76,7 @@ public class AlarmHelper {
     public void setAlarmOff() {
         alarmManager.cancel(pendingIntent);
         alarm.setAlarmOn(false);
-        repositoryPrefs.updateAlarmClock(alarm);
+        repository.updateAlarmClock(alarm);
         Toast.makeText(context, R.string.alarm_is_off, Toast.LENGTH_LONG).show();
     }
 

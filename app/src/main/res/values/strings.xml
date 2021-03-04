@@ -13,4 +13,6 @@
     <string name="alarm_is_on_notification">Будильник включён</string>
     <string name="language_en">En</string>
     <string name="language_ru">Ru</string>
+    <string name="weather">Температура: %d°C\nВлажность: %d %%\nОбстановка: пока %s\nВетер: %d м/с</string>
+
 </resources>

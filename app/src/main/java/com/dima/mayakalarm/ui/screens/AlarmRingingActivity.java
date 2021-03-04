@@ -30,33 +30,8 @@ public class AlarmRingingActivity extends AppCompatActivity {
 
     private Player player;
 
-    private final Repository repository = new Repository(new RepositoryListener() {
-
-        @Override
-        public void onStartDownload() {
-            pbPreloader.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        public void onGetRemoteInfo(InfoToShow infoToShow) {
-            tvWeather.setText(infoToShow.getCurrentWeather());
-            Picasso.with(getApplicationContext())
-                    .load(infoToShow.getImageUrl())
-                    .into(ivPicture);
-        }
-
-        @Override
-        public void onError(String message) {
-            tvWeather.setText(R.string.empty_state_text);
-            ivPicture.setImageResource(R.drawable.galaxy);
-            repository.getInfoToShow();
-        }
-
-        @Override
-        public void onEndDownload() {
-            pbPreloader.setVisibility(View.GONE);
-        }
-    });
+    private Repository repository;
+    private RepositoryListener repositoryListener;
 
 
     @Override
@@ -73,9 +48,42 @@ public class AlarmRingingActivity extends AppCompatActivity {
         pbPreloader = findViewById(R.id.pbPreloader);
         ivPicture = findViewById(R.id.ivPicture);
 
+        repository = new Repository(this);
+        repositoryListener = new RepositoryListener() {
+
+            @Override
+            public void onStartDownload() {
+                pbPreloader.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onGetRemoteInfo(int temp, int humidity, String description, int windSpeed) {
+                tvWeather.setText(String.format(getResources()
+                        .getString(R.string.weather), temp, humidity, description, windSpeed));
+            }
+
+            @Override
+            public void onGetImageInfo(InfoToShow infoToShow) {
+                Picasso.with(getApplicationContext())
+                        .load(infoToShow.getImageUrl())
+                        .into(ivPicture);
+            }
+
+            @Override
+            public void onError(String message) {
+                tvWeather.setText(R.string.empty_state_text);
+                ivPicture.setImageResource(R.drawable.galaxy);
+            }
+
+            @Override
+            public void onEndDownload() {
+                pbPreloader.setVisibility(View.GONE);
+            }
+        };
+
         turnBacklightOn();
         player.play();
-        repository.getInfoToShow();
+        repository.getInfoToShow(repositoryListener);
 
         btnDismiss.setOnClickListener(v -> {
             alarmHelper.scheduleNextDayAlarm();
