@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dima.mayakalarm.R;
-import com.dima.mayakalarm.model.InfoToShow;
 import com.dima.mayakalarm.repository.Repository;
 import com.dima.mayakalarm.repository.RepositoryListener;
 import com.dima.mayakalarm.util.AlarmHelper;
@@ -59,9 +58,9 @@ public class AlarmRingingActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onGetImageInfo(InfoToShow infoToShow) {
+            public void onGetImageInfo(String picUrl) {
                 Picasso.with(getApplicationContext())
-                        .load(infoToShow.getImageUrl())
+                        .load(picUrl)
                         .into(ivPicture);
             }
 

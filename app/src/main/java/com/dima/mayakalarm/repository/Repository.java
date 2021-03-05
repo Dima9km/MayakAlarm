@@ -4,7 +4,6 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 
 import com.dima.mayakalarm.model.Alarm;
-import com.dima.mayakalarm.model.InfoToShow;
 import com.dima.mayakalarm.preferences.SharedPreferencesManager;
 import com.dima.mayakalarm.remote.RemoteInfoDownloader;
 import com.dima.mayakalarm.remote.RemoteInfoListener;
@@ -21,7 +20,6 @@ public class Repository {
     public static Repository getInstance(Context context) {
         if (repository == null) {
             repository = new Repository(context);
-
         }
         return repository;
     }
@@ -38,8 +36,8 @@ public class Repository {
             }
 
             @Override
-            public void onGetImageData(InfoToShow infoToShow) {
-                repositoryListener.onGetImageInfo(infoToShow);
+            public void onGetImageData(String picUrl) {
+                repositoryListener.onGetImageInfo(picUrl);
             }
 
             @Override

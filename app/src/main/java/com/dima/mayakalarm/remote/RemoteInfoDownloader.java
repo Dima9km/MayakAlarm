@@ -3,7 +3,6 @@ package com.dima.mayakalarm.remote;
 import androidx.annotation.NonNull;
 
 import com.dima.mayakalarm.model.FlikrImage;
-import com.dima.mayakalarm.model.InfoToShow;
 import com.dima.mayakalarm.model.WeatherResponse;
 import com.dima.mayakalarm.network.ImageApi;
 import com.dima.mayakalarm.network.NetworkHelper;
@@ -14,8 +13,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RemoteInfoDownloader {
-
-    private final InfoToShow infoToShow = new InfoToShow();
 
     public void getInfoToShow(RemoteInfoListener remoteInfoListener, String lang) {
         WeatherApi weatherApi = NetworkHelper.getInstance().retrofitWeather.create(WeatherApi.class);
@@ -55,8 +52,8 @@ public class RemoteInfoDownloader {
             public void onResponse(@NonNull Call<FlikrImage> call, @NonNull Response<FlikrImage> response) {
                 if (response.code() == 200) {
                     FlikrImage flikrImage = response.body();
-                    infoToShow.setImageUrl(flikrImage.getFile());
-                    remoteInfoListener.onGetImageData(infoToShow);
+                    String picUrl = flikrImage.getFile();
+                    remoteInfoListener.onGetImageData(picUrl);
                 }
             }
 
