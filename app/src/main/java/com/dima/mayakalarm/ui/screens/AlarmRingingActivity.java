@@ -25,14 +25,10 @@ public class AlarmRingingActivity extends AppCompatActivity {
 
     private TextView tvWeather;
     private ImageView ivPicture;
-    private ProgressBar pbPreloader;
+    private ProgressBar pbLoader;
     private AlarmHelper alarmHelper;
 
     private Player player;
-
-    private Repository repository;
-    private RepositoryListener repositoryListener;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,15 +41,15 @@ public class AlarmRingingActivity extends AppCompatActivity {
         Button btnDismiss = findViewById(R.id.btnDismiss);
         Button btnSnooze = findViewById(R.id.btnSnooze);
         tvWeather = findViewById(R.id.tvWeather);
-        pbPreloader = findViewById(R.id.pbPreloader);
+        pbLoader = findViewById(R.id.pbPreloader);
         ivPicture = findViewById(R.id.ivPicture);
 
-        repository = new Repository(this);
-        repositoryListener = new RepositoryListener() {
+        Repository repository = Repository.getInstance(this);
+        RepositoryListener repositoryListener = new RepositoryListener() {
 
             @Override
             public void onStartDownload() {
-                pbPreloader.setVisibility(View.VISIBLE);
+                pbLoader.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -77,7 +73,7 @@ public class AlarmRingingActivity extends AppCompatActivity {
 
             @Override
             public void onEndDownload() {
-                pbPreloader.setVisibility(View.GONE);
+                pbLoader.setVisibility(View.GONE);
             }
         };
 

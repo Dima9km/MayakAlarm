@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.dima.mayakalarm.R;
 import com.dima.mayakalarm.util.AlarmHelper;
-import com.dima.mayakalarm.util.LanguageSwitcher;
+import com.dima.mayakalarm.util.LocaleManager;
 import com.dima.mayakalarm.util.NotificationHelper;
 
 import java.util.Calendar;
@@ -19,7 +19,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity {
 
     private TextView tvAlarmStatus;
-    private Button btnSetLang;
+    private Button btnChangeLocale;
     private Button btnSetAlarm;
     private Button btnCancelAlarm;
     private Button btnOnTomorrow;
@@ -27,27 +27,27 @@ public class MainActivity extends AppCompatActivity {
 
     private NotificationHelper notificationHelper;
     private AlarmHelper alarmHelper;
-    private LanguageSwitcher languageSwitcher;
+    private LocaleManager localeManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         notificationHelper = new NotificationHelper(this);
         alarmHelper = new AlarmHelper(this);
-        languageSwitcher = new LanguageSwitcher(this);
+        localeManager = new LocaleManager(this);
 
-        setContentView(R.layout.activity_main);
         tvAlarmStatus = findViewById(R.id.tvAlarmSetStatus);
-        btnSetLang = findViewById(R.id.btnSetLang);
+        btnChangeLocale = findViewById(R.id.btnChangeLocale);
         btnSetAlarm = findViewById(R.id.btnSetAlarm);
         btnCancelAlarm = findViewById(R.id.btnCancelAlarm);
         btnOnTomorrow = findViewById(R.id.btnOnTomorrow);
         tpTime = findViewById(R.id.tpTime);
         tpTime.setIs24HourView(true);
 
-        btnSetLang.setOnClickListener(v -> {
-            languageSwitcher.switchLanguage();
+        btnChangeLocale.setOnClickListener(v -> {
+            localeManager.switchLocale();
             recreate();
             updateUI();
         });
@@ -76,18 +76,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI() {
         long time = alarmHelper.getAlarm().getTime();
-        btnSetLang.setText(alarmHelper.getAlarm().getLanguage());
+        btnChangeLocale.setText(localeManager.getCurrentLocale());
 
         if (!alarmHelper.getAlarm().isAlarmOn()) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(time);
+
             tpTime.setHour(calendar.get(Calendar.HOUR_OF_DAY));
             tpTime.setMinute(calendar.get(Calendar.MINUTE));
-            btnSetAlarm.setVisibility(View.VISIBLE);
             tpTime.setVisibility(View.VISIBLE);
+
+            btnSetAlarm.setVisibility(View.VISIBLE);
             btnCancelAlarm.setVisibility(View.GONE);
             btnOnTomorrow.setVisibility(View.GONE);
             tvAlarmStatus.setText(R.string.alarm_status_off);
+
             notificationHelper.hide();
 
         } else {
@@ -105,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                         .format("HH.mm\n EEEE, dd MMMM yyyy", time).toString()));
                 btnOnTomorrow.setVisibility(View.GONE);
             }
+
             notificationHelper.show();
         }
     }

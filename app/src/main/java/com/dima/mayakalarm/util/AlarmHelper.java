@@ -28,7 +28,7 @@ public class AlarmHelper {
         this.context = context;
 
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        repository = new Repository(context);
+        repository = Repository.getInstance(context);
         alarm = repository.getAlarmClock();
 
         pendingIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, AlarmBroadcastReceiver.class), 0);

@@ -3,32 +3,28 @@ package com.dima.mayakalarm.util;
 import android.content.Context;
 import android.content.res.Configuration;
 
-import com.dima.mayakalarm.model.Alarm;
 import com.dima.mayakalarm.repository.Repository;
 
 import java.util.Locale;
 
-public class LanguageSwitcher {
+public class LocaleManager {
 
-    private final Context context;
+    private Context context;
+    private final Repository repository = Repository.getInstance(context);
 
-    public LanguageSwitcher (Context context) {
+    public LocaleManager(Context context) {
         this.context = context;
     }
 
-    public void switchLanguage() {
-        Repository repository = new Repository(context);
-        Alarm alarm = repository.getAlarmClock();
-        String currentLang = alarm.getLanguage();
+    public void switchLocale() {
 
-        if (currentLang.equals("en")) {
+        if (repository.getAppLocale().equals("en")) {
             Locale localeRu = new Locale("ru", "RU");
             Locale.setDefault(localeRu);
             Configuration config = context.getResources().getConfiguration();
             config.locale = localeRu;
             context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-            alarm.setLanguage("ru");
-            repository.updateAlarmClock(alarm);
+            repository.saveAppLocale(localeRu.getLanguage());
 
         } else {
             Locale localeEn = new Locale("en", "EN");
@@ -36,8 +32,11 @@ public class LanguageSwitcher {
             Configuration config = context.getResources().getConfiguration();
             config.locale = localeEn;
             context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-            alarm.setLanguage("en");
-            repository.updateAlarmClock(alarm);
+            repository.saveAppLocale(localeEn.getLanguage());
         }
+    }
+
+    public String getCurrentLocale() {
+        return repository.getAppLocale();
     }
 }

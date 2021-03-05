@@ -11,10 +11,19 @@ import com.dima.mayakalarm.remote.RemoteInfoListener;
 
 public class Repository {
 
+    private static Repository repository;
     private final SharedPreferencesManager sharedPreferencesManager;
 
-    public Repository(Context context) {
+    private Repository(Context context) {
         sharedPreferencesManager = new SharedPreferencesManager(PreferenceManager.getDefaultSharedPreferences(context));
+    }
+
+    public static Repository getInstance(Context context) {
+        if (repository == null) {
+            repository = new Repository(context);
+
+        }
+        return repository;
     }
 
     public void getInfoToShow(RepositoryListener repositoryListener) {
@@ -37,7 +46,7 @@ public class Repository {
             public void onError(String message) {
                 repositoryListener.onError(message);
             }
-        }, getCurrentLanguage());
+        }, getAppLocale());
     }
 
     public Alarm getAlarmClock() {
@@ -48,7 +57,12 @@ public class Repository {
         sharedPreferencesManager.updateAlarmClock(alarm);
     }
 
-    public String getCurrentLanguage() {
-        return sharedPreferencesManager.getAlarmClock().getLanguage();
+    public String getAppLocale() {
+        return sharedPreferencesManager.getLocale();
     }
+
+    public void saveAppLocale(String locale) {
+        sharedPreferencesManager.updateLocale(locale);
+    }
+
 }
