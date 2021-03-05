@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 
 import com.dima.mayakalarm.model.Alarm;
 
+import java.util.Locale;
+
 
 public class SharedPreferencesManager {
 
@@ -30,7 +32,7 @@ public class SharedPreferencesManager {
     }
 
     public String getLocale() {
-        return preferences.getString(LOCALE, "ru");
+        return preferences.getString(LOCALE, Locale.getDefault().getLanguage());
     }
 
     public void updateLocale (String locale) {

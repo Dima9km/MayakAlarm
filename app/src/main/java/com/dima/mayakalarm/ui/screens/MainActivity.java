@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
         btnChangeLocale.setOnClickListener(v -> {
             localeManager.switchLocale();
-            recreate();
             updateUI();
+            recreate();
         });
 
         btnSetAlarm.setOnClickListener(v -> {
