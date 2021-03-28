@@ -1,4 +1,4 @@
-package com.dima.mayakalarm.ui.screens;
+package com.dima.mayakalarm.ui.screens.main;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -78,7 +78,7 @@ public class AlarmRingingActivity extends AppCompatActivity {
 
         turnBacklightOn();
         player.play();
-        repository.getInfoToShow(repositoryListener);
+        repository.getInfo(repositoryListener);
 
         btnDismiss.setOnClickListener(v -> {
             alarmHelper.scheduleNextDayAlarm();

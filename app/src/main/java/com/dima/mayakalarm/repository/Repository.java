@@ -24,7 +24,7 @@ public class Repository {
         return repository;
     }
 
-    public void getInfoToShow(RepositoryListener repositoryListener) {
+    public void getInfo(RepositoryListener repositoryListener) {
         repositoryListener.onStartDownload();
 
         new RemoteInfoDownloader().getInfoToShow(new RemoteInfoListener() {
