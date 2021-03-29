@@ -8,7 +8,7 @@ public interface RepositoryListener {
 
     void onGetImageInfo(String picUrl);
 
-    void onError(String message);
+    void onError();
 
     void onEndDownload();
 }

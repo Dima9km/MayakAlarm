@@ -42,7 +42,7 @@ public class Repository {
 
             @Override
             public void onError(String message) {
-                repositoryListener.onError(message);
+                repositoryListener.onError();
             }
         }, getAppLocale());
     }
