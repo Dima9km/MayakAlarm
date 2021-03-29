@@ -21,6 +21,6 @@ public interface MainContract {
 
         void onScheduleNextDayAlarmClicked();
 
-        void updateCurrentUI();
+        void onResume();
     }
 }

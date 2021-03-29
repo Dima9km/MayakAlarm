@@ -10,6 +10,9 @@ import android.widget.TimePicker;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dima.mayakalarm.R;
+import com.dima.mayakalarm.util.AlarmHelper;
+import com.dima.mayakalarm.util.LocaleManager;
+import com.dima.mayakalarm.util.NotificationHelper;
 
 import java.util.Calendar;
 
@@ -29,13 +32,17 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mainPresenter = new MainPresenter(this, this);
+        mainPresenter = new MainPresenter(this,
+                new NotificationHelper(this),
+                new AlarmHelper(this),
+                new LocaleManager(this));
 
         setupUI();
 
         btnChangeLocale.setOnClickListener(v -> mainPresenter.onSwitchLocaleClicked());
 
-        btnSetAlarm.setOnClickListener(v -> mainPresenter.onScheduleAlarmClicked(tpTime.getHour(), tpTime.getMinute()));
+        btnSetAlarm.setOnClickListener(v -> mainPresenter.onScheduleAlarmClicked(tpTime.getHour(),
+                tpTime.getMinute()));
 
         btnCancelAlarm.setOnClickListener(v -> mainPresenter.onSetAlarmOffClicked());
 
@@ -45,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     protected void onResume() {
         super.onResume();
-        mainPresenter.updateCurrentUI();
+        mainPresenter.onResume();
     }
 
     @Override
@@ -56,7 +63,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         if (time < System.currentTimeMillis()) {
             tvAlarmStatus.setText(String.format(getResources()
                     .getString(R.string.alarm_status_on), DateFormat
-                    .format("HH.mm\n EEEE, dd MMMM yyyy", time + 10 * 60 * 1000).toString()));
+                    .format("HH.mm\n EEEE, dd MMMM yyyy",
+                            time + 10 * 60 * 1000).toString()));
             btnOnTomorrow.setVisibility(View.VISIBLE);
         } else {
             tvAlarmStatus.setText(String.format(getResources()

@@ -1,24 +1,23 @@
 package com.dima.mayakalarm.ui.screens.main;
 
-import android.content.Context;
-
 import com.dima.mayakalarm.util.AlarmHelper;
 import com.dima.mayakalarm.util.LocaleManager;
 import com.dima.mayakalarm.util.NotificationHelper;
 
 public class MainPresenter implements MainContract.Presenter {
 
-    public final NotificationHelper notificationHelper;
-    public final AlarmHelper alarmHelper;
-    public final LocaleManager localeManager;
+    private final NotificationHelper notificationHelper;
+    private final AlarmHelper alarmHelper;
+    private final LocaleManager localeManager;
 
     private final MainContract.View mainView;
 
-    public MainPresenter(MainContract.View mainView, Context context) {
+    public MainPresenter(MainContract.View mainView, NotificationHelper notificationHelper,
+                         AlarmHelper alarmHelper, LocaleManager localeManager) {
         this.mainView = mainView;
-        notificationHelper = new NotificationHelper(context);
-        alarmHelper = new AlarmHelper(context);
-        localeManager = new LocaleManager(context);
+        this.notificationHelper = notificationHelper;
+        this.alarmHelper = alarmHelper;
+        this.localeManager = localeManager;
     }
 
     @Override
@@ -50,7 +49,7 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void updateCurrentUI() {
+    public void onResume() {
         if (!alarmHelper.getAlarm().isAlarmOn()) {
             mainView.showStateAlarmIsOff(alarmHelper.getAlarm().getTime());
             notificationHelper.hide();
@@ -58,6 +57,5 @@ public class MainPresenter implements MainContract.Presenter {
             mainView.showStateAlarmIsOn(alarmHelper.getAlarm().getTime());
             notificationHelper.show();
         }
-
     }
 }

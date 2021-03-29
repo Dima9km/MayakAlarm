@@ -1,4 +1,4 @@
 package com.dima.mayakalarm.ui.screens.main;
 
-public class RingingPresenter {
+public interface AlarmRingingContract {
 }
