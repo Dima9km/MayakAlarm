@@ -1,4 +1,4 @@
-package com.dima.mayakalarm.ui.screens.main;
+package com.dima.mayakalarm.ui.screens.ringing;
 
 import com.dima.mayakalarm.repository.Repository;
 import com.dima.mayakalarm.repository.RepositoryListener;

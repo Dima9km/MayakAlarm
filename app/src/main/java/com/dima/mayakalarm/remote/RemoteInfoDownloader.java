@@ -14,7 +14,7 @@ import retrofit2.Response;
 
 public class RemoteInfoDownloader {
 
-    public void getInfoToShow(RemoteInfoListener remoteInfoListener, String lang) {
+    public void getInfo(RemoteInfoListener remoteInfoListener, String lang) {
         WeatherApi weatherApi = NetworkHelper.getInstance().retrofitWeather.create(WeatherApi.class);
         String units = "metric";
         String lon = "39.17";

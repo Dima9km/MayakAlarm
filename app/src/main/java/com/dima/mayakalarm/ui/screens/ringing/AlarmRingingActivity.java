@@ -1,4 +1,4 @@
-package com.dima.mayakalarm.ui.screens.main;
+package com.dima.mayakalarm.ui.screens.ringing;
 
 import android.os.Build;
 import android.os.Bundle;

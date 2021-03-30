@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.dima.mayakalarm.ui.screens.main.AlarmRingingActivity;
+import com.dima.mayakalarm.ui.screens.ringing.AlarmRingingActivity;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 

@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.screens.main.AlarmRingingActivity"
+            android:name=".ui.screens.ringing.AlarmRingingActivity"
             android:screenOrientation="portrait" />
 
         <receiver

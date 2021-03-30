@@ -27,7 +27,7 @@ public class Repository {
     public void getInfo(RepositoryListener repositoryListener) {
         repositoryListener.onStartDownload();
 
-        new RemoteInfoDownloader().getInfoToShow(new RemoteInfoListener() {
+        new RemoteInfoDownloader().getInfo(new RemoteInfoListener() {
 
             @Override
             public void onGetData(int temp, int humidity, String description, int windSpeed) {
