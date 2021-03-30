@@ -19,7 +19,7 @@ public class RemoteInfoDownloader {
         String units = "metric";
         String lon = "39.17";
         String lat = "51.6664";
-        String appId = "f52cbda5d0f59d7559eb126d5fc0e0e2";
+        String appId = "censored";
         Call<WeatherResponse> callWeather = weatherApi.getWeatherData(lat, lon, appId, units, lang);
 
         callWeather.enqueue(new Callback<WeatherResponse>() {
